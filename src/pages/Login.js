@@ -1,35 +1,18 @@
-import React from 'react';
-import Button from '../components/Button';
-import Form from '../components/Form';
-import Illustration from '../components/Illustration';
-import TextInput from '../components/TextInput';
-import classes from '../styles/Login.module.css';
+import React from "react";
+import Illustration from "../components/Illustration";
+import LoginForm from "../components/LoginForm";
 
 const Login = () => {
-    return (
-        <>
-            <h1>Login to your account</h1>
+  return (
+    <>
+      <h1>Login to your account</h1>
 
-            <div className="column">
-                <Illustration />
-                <Form className={`${classes.login}`}>
-                    <TextInput
-                        type="text"
-                        placeholder="Enter email"
-                        icon="alternate_email"
-                    />
-
-                    <TextInput type="password" placeholder="Enter password" icon="lock" />
-
-                    <Button><span>Submit Now</span></Button>
-
-                    <div className="info">
-                        Don't have an account? <a href="signup.html">Signup</a> instead.
-                    </div>
-                </Form>
-            </div>
-        </>
-    );
+      <div className="column">
+        <Illustration />
+        <LoginForm />
+      </div>
+    </>
+  );
 };
 
 export default Login;
