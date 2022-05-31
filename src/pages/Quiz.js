@@ -1,9 +1,11 @@
+import { getDatabase, ref, set } from "firebase/database";
 import _ from "lodash";
 import React, { useEffect, useReducer, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Answers from "../components/Answers";
 import MiniPlayer from "../components/MiniPlayer";
 import ProgressBar from "../components/ProgressBar";
+import { useAuth } from "../contexts/AuthContext";
 import UseQuestion from "../Hooks/UseQuestion";
 
 const initialState = null;
@@ -30,8 +32,9 @@ const Quiz = () => {
   const { id } = useParams();
   const { loading, error, quiz } = UseQuestion(id);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-
   const [qna, dispatch] = useReducer(reducer, initialState);
+  const { currentUser } = useAuth();
+  const history = useHistory();
 
   useEffect(() => {
     dispatch({
@@ -49,6 +52,38 @@ const Quiz = () => {
     });
   }
 
+  console.log(currentQuestion);
+  console.log(quiz.length);
+
+  function nextQuestion() {
+    if (currentQuestion <= quiz.length) {
+      setCurrentQuestion((prevQues) => prevQues + 1);
+    }
+  }
+
+  function previousQues() {
+    if (currentQuestion >= 1 && currentQuestion <= quiz.length) {
+      setCurrentQuestion((prevQues) => prevQues - 1);
+    }
+  }
+
+  async function submit() {
+    const { uid } = currentUser;
+
+    const db = getDatabase();
+    const resultRef = ref(db, `result/${uid}`);
+    await set(resultRef, {
+      [id]: qna,
+    });
+    history.push({
+      pathname: `result/${id}`,
+      state: { qna },
+    });
+  }
+
+  const percentage =
+    quiz.length > 0 ? ((currentQuestion + 1) / quiz.length) * 100 : 0;
+
   return (
     <>
       {loading && <div>Loading...</div>}
@@ -61,7 +96,12 @@ const Quiz = () => {
             options={qna[currentQuestion].options}
             handleAnswerChange={handleAnswerChange}
           />
-          <ProgressBar />
+          <ProgressBar
+            next={nextQuestion}
+            prev={previousQues}
+            progress={percentage}
+            submit={submit}
+          />
           <MiniPlayer />
         </>
       )}
