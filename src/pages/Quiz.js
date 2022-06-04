@@ -52,9 +52,6 @@ const Quiz = () => {
     });
   }
 
-  console.log(currentQuestion);
-  console.log(quiz.length);
-
   function nextQuestion() {
     if (currentQuestion <= quiz.length) {
       setCurrentQuestion((prevQues) => prevQues + 1);
@@ -76,7 +73,7 @@ const Quiz = () => {
       [id]: qna,
     });
     history.push({
-      pathname: `result/${id}`,
+      pathname: `/result/${id}`,
       state: { qna },
     });
   }
@@ -95,6 +92,7 @@ const Quiz = () => {
           <Answers
             options={qna[currentQuestion].options}
             handleAnswerChange={handleAnswerChange}
+            input
           />
           <ProgressBar
             next={nextQuestion}
