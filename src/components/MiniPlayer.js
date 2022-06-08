@@ -35,7 +35,14 @@ const MiniPlayer = ({ id, title }) => {
         close{" "}
       </span>
 
-      <ReactPlayer url={videoUrl} width="300px" height="168px" />
+      <ReactPlayer
+        className={classes.player}
+        url={videoUrl}
+        width="300px"
+        height="168px"
+        playing={status}
+        controls
+      />
       <p>{title}</p>
     </div>
   );
